@@ -1,14 +1,14 @@
-import { Routes, Route, Link } from "react-router-dom";
-import Game from "./Game";
+import './App.css'
+import Hand from './Hand'
+import Game from './Game'
+import { Routes, Route } from 'react-router-dom';
 
 function Home() {
   return (
-    <div>
-      <Link to="/game">
-        <button>Play</button>
-      </Link>
-    </div>
-  );
+    <>
+      <Hand></Hand>
+    </>
+  )
 }
 
 export default function App() {
