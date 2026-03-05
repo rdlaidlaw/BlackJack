@@ -1,9 +1,9 @@
+import Quotes from "./Quotes.tsx";
+
 export default function Game() {
     return (
         <>
-        <p>
-            Gaming
-        </p>
+        <Quotes />
         </>
     )
 }
