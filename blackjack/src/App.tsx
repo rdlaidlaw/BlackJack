@@ -3,9 +3,9 @@ import Game from "./Game";
 
 function Home() {
   return (
-    <div>
+    <div className="h-screen flex justify-center items-center">
       <Link to="/game">
-        <button>Play</button>
+        <button className="px-6 py-3 bg-blue-500 text-white rounded-xl">Play</button>
       </Link>
     </div>
   );

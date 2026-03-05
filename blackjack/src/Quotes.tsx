@@ -26,7 +26,7 @@ export default function Quotes() {
 
   return (
     <div>
-      <p>"{quote.quote}"</p>
+      <p className="bg-red">"{quote.quote}"</p>
       <small>- {quote.author}</small>
     </div>
   );
