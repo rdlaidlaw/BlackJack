@@ -1,30 +1,18 @@
-import { useState } from "react";
 import Card from "./Card.tsx";
 
-interface Card {
+export interface CardType {
     suit: string;
     value: string;
 }
 
-export default function Hand() {
-    const [cards, setCards] = useState<Card[]>([]);
+interface HandProps {
+    cards: CardType[];
+}
 
-    function addCard(card: Card) {
-        setCards(prev => [...prev, card]);
-    }
-
-    function showCards() {
-        return cards.map((card, index) => (
-            <Card key={index} suit={card.suit} value={card.value} />
-        ));
-    }
-
+export default function Hand({ cards }: HandProps) {
     return (
-        <div>
-            <button onClick={() => addCard({ suit: "hearts", value: "A" })} className="bg-blue-500 text-white px-4 py-2 rounded">
-                Hit
-            </button>
-            {showCards()}
+        <div className="flex gap-2">
+            {cards.map((card, index) => (<Card key={index} suit={card.suit} value={card.value} />))}
         </div>
     );
 }
