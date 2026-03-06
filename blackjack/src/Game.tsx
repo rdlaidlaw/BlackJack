@@ -1,18 +1,27 @@
 import Quotes from "./Quotes.tsx";
 import { useState } from "react";
 import Hand, { type CardType } from "./Hand.tsx";
+import Deck from "./Deck.ts";
 
-export default function Game() {
-        const [playerCards, setPlayerCards] = useState<CardType[]>([]);
-        const [dealerCards, setDealerCards] = useState<CardType[]>([]);
+interface GameProps {
+    deck: Deck | null;
+}
 
-        function playerHit() {
-            setPlayerCards(prev => [...prev, { suit: "hearts", value: "A" }]);
-        }
+export default function Game({ deck }: GameProps) {
+    if (!deck) {
+        deck = new Deck()
+        deck.createNewDeck();
+    }
+    const [playerCards, setPlayerCards] = useState<CardType[]>([]);
+    const [dealerCards, setDealerCards] = useState<CardType[]>([]);
 
-        function dealerHit() {
-            setDealerCards(prev => [...prev, { suit: "spades", value: "K" }]);
-        }
+    function playerHit() {
+        setPlayerCards(prev => [...prev, deck!.draw()]);
+    }
+
+    function dealerHit() {
+        setDealerCards(prev => [...prev, deck!.draw()]);
+    }
 
     return (
         <div className="flex h-screen">
