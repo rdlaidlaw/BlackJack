@@ -1,5 +1,5 @@
 import Quotes from "./Quotes.tsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Hand, { type CardType } from "./Hand.tsx";
 import Deck from "./Deck.ts";
 
@@ -8,24 +8,31 @@ interface GameProps {
 }
 
 export default function Game({ deck }: GameProps) {
-    if (!deck) {
-        deck = new Deck();
-        deck.createNewDeck();
-    }
-
     const [playerCards, setPlayerCards] = useState<CardType[]>([]);
     const [dealerCards, setDealerCards] = useState<CardType[]>([]);
     const [balance, setBalance] = useState<number>(5000);
     const [bet, setBet] = useState<number>(0);
 
-    function playerHit() {
-        if (balance <= 0) return;
-        setPlayerCards(prev => [...prev, deck!.draw()]);
+    if (!deck) {
+        deck = new Deck();
+        deck.createNewDeck();
     }
 
-    function dealerHit() {
+    useEffect(() => {
+        setDealerCards([deck!.draw()]);
+    }, []);
+    useEffect(() => {
+        setPlayerCards([deck!.draw(), deck!.draw()]);
+    }, []);
+
+    function playerHit() {
         if (balance <= 0) return;
-        setDealerCards(prev => [...prev, deck!.draw()]);
+        const newCards = [...playerCards, deck!.draw()];
+        setPlayerCards(newCards);
+
+        if (getHandValue(newCards) > 21) {
+            resolveHand(false);
+        }
     }
 
     function resolveHand(playerWins: boolean) {
@@ -36,9 +43,57 @@ export default function Game({ deck }: GameProps) {
             setBalance(prev => Math.max(prev - bet, 0));
             alert(`You lost $${bet}.`);
         }
-        setPlayerCards([]);
-        setDealerCards([]);
+        setDealerCards([deck!.draw()]);
+        setPlayerCards([deck!.draw(), deck!.draw()]);
         setBet(0);
+    }
+
+    function getHandValue(cards: CardType[]) {
+        let total = 0;
+        let aces = 0;
+
+        for (const card of cards) {
+            if (["J","Q","K"].includes(card.value)) total += 10;
+            else if (card.value === "A") {
+                total += 11;
+                aces++;
+            } else total += Number(card.value);
+        }
+
+        while (total > 21 && aces > 0) {
+            total -= 10;
+            aces--;
+        }
+
+        return total;
+    }
+
+    async function dealerTurn() {
+        let newDealerCards = [...dealerCards];
+
+        while (getHandValue(newDealerCards) < 17) {
+            await new Promise(r => setTimeout(r, 800));
+            const card = deck!.draw();
+            newDealerCards.push(card);
+            setDealerCards([...newDealerCards]);
+        }
+        setDealerCards(newDealerCards);
+        const dealerScore = getHandValue(newDealerCards);
+        const playerScore = getHandValue(playerCards);
+
+        await new Promise(r => setTimeout(r, 1200));
+        
+        if (playerScore > 21) {
+            resolveHand(false);
+        } else if (dealerScore > 21) {
+            resolveHand(true);
+        } else if (playerScore > dealerScore) {
+            resolveHand(true);
+        } else if (dealerScore > playerScore) {
+            resolveHand(false);
+        } else {
+            alert("Push! Bet returned.");
+        }
     }
 
     return (
@@ -65,13 +120,6 @@ export default function Game({ deck }: GameProps) {
                 <div className="flex flex-col items-center">
                     <h2 className="text-xl font-bold">Dealer</h2>
                     <Hand cards={dealerCards} />
-                    <button
-                        onClick={dealerHit}
-                        className="bg-red-500 text-white px-3 py-1 rounded mt-2"
-                        disabled={balance <= 0}
-                    >
-                        Dealer Draw
-                    </button>
                 </div>
 
                 <div className="flex flex-col items-center">
@@ -85,22 +133,13 @@ export default function Game({ deck }: GameProps) {
                         Hit
                     </button>
 
-                    <div className="flex gap-2 mt-2">
-                        <button
-                            onClick={() => resolveHand(true)}
-                            className="bg-green-500 text-white px-3 py-1 rounded"
-                            disabled={balance <= 0}
-                        >
-                            Win Hand
-                        </button>
-                        <button
-                            onClick={() => resolveHand(false)}
-                            className="bg-gray-500 text-white px-3 py-1 rounded"
-                            disabled={balance <= 0}
-                        >
-                            Lose Hand
-                        </button>
-                    </div>
+                    <button
+                        onClick={dealerTurn}
+                        className="bg-red-500 text-white px-3 py-1 rounded mt-2"
+                        disabled={balance <= 0}
+                    >
+                        Stand
+                    </button>
 
                     <div className="mt-4">
                         {balance > 0 ? (
