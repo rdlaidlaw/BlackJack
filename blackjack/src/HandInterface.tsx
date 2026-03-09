@@ -1,3 +1,0 @@
-interface IHand {
-    sum: number,
-}

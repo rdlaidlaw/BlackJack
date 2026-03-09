@@ -25,10 +25,12 @@ export default function Game({ deck }: GameProps) {
         setPlayerCards([deck!.draw(), deck!.draw()]);
     }, []);
 
-    function playerHit() {
+    async function playerHit() {
         if (balance <= 0) return;
         const newCards = [...playerCards, deck!.draw()];
         setPlayerCards(newCards);
+
+        await new Promise(r => setTimeout(r, 1200));
 
         if (getHandValue(newCards) > 21) {
             resolveHand(false);
