@@ -24,7 +24,7 @@ export default class Deck {
     }
 
     draw(): CardType {
-        if (this.cards.length > 0) {
+        if (this.cards.length === 0) {
             this.createNewDeck();
         }
         return this.cards.pop()!

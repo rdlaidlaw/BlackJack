@@ -13,7 +13,6 @@ const suitColors = {
 };
 
 export default function PlayingCard({ suit = "spades", value = "A" }) {
-    // warnings not errors
     const symbol = suitSymbols[suit];
     const color = suitColors[suit];
 
