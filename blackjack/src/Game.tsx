@@ -147,12 +147,13 @@ export default function Game({ deck }: GameProps) {
     const llama = players.find(p => p.id === "ai1");
 
     return (
+        // quotes
         <div className="flex h-screen bg-[url('./assets/background.png')] bg-cover bg-center">
             <div className="w-1/5 text-[#FFD700] font-serif text-3xl italic mt-[15px] ml-[10px]">
             <Quotes />
             </div>
 
-            <div className="w-1/5 text-[#FFD700] font-serif flex justify-center mt-[400px] mr-[25px]">
+            <div className="absolute top-70 right-300 text-[#FFD700] font-serif flex justify-center mt-[400px] mr-[25px]">
             {dealerCards.length > 0 && human.cards.length > 0 && (
                 <Taunts
                 playerCards={human.cards}
@@ -160,7 +161,7 @@ export default function Game({ deck }: GameProps) {
                 />
             )}
             </div>
-
+            {/* balance and betting */}
             <div className="absolute top-3 right-3 flex flex-col items-end gap-2">
                 <div className="mt-4">
                 {balance > 0 ? (
@@ -193,7 +194,7 @@ export default function Game({ deck }: GameProps) {
                     }}
                     className="text-[#FFD700] font-serif border rounded px-2 py-1 text-right"
                     />
-
+                    {/* deal button */}
                     <button
                     onClick={startRound}
                     disabled={bet <= 0}
@@ -205,19 +206,20 @@ export default function Game({ deck }: GameProps) {
                 )}
             </div>
         
-        <div className="flex flex-col flex-1 items-center justify-start pt-6">
+        <div className="relative top-30 right-60 flex flex-col flex-1 items-center justify-start pt-6">
+            {/* dealer hand */}
             <div className="flex flex-col items-center mb-10">
                 <h2 className="text-[#FFD000] font-serif text-xl font-bold">Dealer</h2>
                 <Hand cards={dealerCards} />
             </div>
-            
+            {/*AI and player hands */}
             <div className="flex gap-20">
-                <div className="flex flex-col items-center w-1/2">
+                <div className="absolute top-70 right-170 flex flex-col items-center w-1/2">
                     <h2 className="text-[#FFD000] font-serif text-lg font-bold">
                         Llama
                     </h2>
 
-                    <Hand cards={players.find(p => p.id === "ai1")?.cards ?? []} />
+                    <Hand cards={players.find(p => p.id === "ai1")?.cards ?? []}/>
 
                     <p className="text-[#FFD700] text-sm italic">
                         {llama?.doneReason === "Thinking" && "Thinking..."}
@@ -228,7 +230,7 @@ export default function Game({ deck }: GameProps) {
                     </div>
 
 
-                    <div className="flex flex-col items-center w-1/2">
+                    <div className="absolute top-70 left-170 flex flex-col items-center w-1/2">
                     <h2 className="text-[#FFD000] font-serif text-xl font-bold">
                         You
                     </h2>
@@ -246,14 +248,14 @@ export default function Game({ deck }: GameProps) {
                         <>
                         <button
                             onClick={humanHit}
-                            className="bg-blue-500 text-white px-3 py-1 rounded mt-2 mr-[450px]"
+                            className="relative right-18 bg-blue-500 text-white px-3 py-1 rounded mt-2 mr-[450px]"
                         >
                             Hit
                         </button>
 
                         <button
                             onClick={humanStand}
-                            className="bg-red-500 text-white px-3 py-1 rounded mt-2 mr-[450px]"
+                            className="relative right-18 bg-red-500 text-white px-3 py-1 rounded mt-2 mr-[450px]"
                         >
                             Stand
                         </button>
