@@ -206,7 +206,7 @@ export default function Game({ deck }: GameProps) {
                 )}
             </div>
         
-        <div className="relative top-30 right-60 flex flex-col flex-1 items-center justify-start pt-6">
+        <div className="relative top-10 right-30 flex flex-col flex-1 items-center justify-start pt-6">
             {/* dealer hand */}
             <div className="flex flex-col items-center mb-10">
                 <h2 className="text-[#FFD000] font-serif text-xl font-bold">Dealer</h2>
@@ -214,7 +214,7 @@ export default function Game({ deck }: GameProps) {
             </div>
             {/*AI and player hands */}
             <div className="flex gap-20">
-                <div className="absolute top-70 right-170 flex flex-col items-center w-1/2">
+                <div className="absolute top-50 right-150 flex flex-col items-center w-1/2">
                     <h2 className="text-[#FFD000] font-serif text-lg font-bold">
                         Llama
                     </h2>
@@ -230,7 +230,7 @@ export default function Game({ deck }: GameProps) {
                     </div>
 
 
-                    <div className="absolute top-70 left-170 flex flex-col items-center w-1/2">
+                    <div className="absolute top-50 left-150 flex flex-col items-center w-1/2">
                     <h2 className="text-[#FFD000] font-serif text-xl font-bold">
                         You
                     </h2>
